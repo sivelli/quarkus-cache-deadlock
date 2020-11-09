@@ -15,11 +15,14 @@ import io.quarkus.cache.CacheResult;
 
 @ApplicationScoped
 class ExampleCache {
+    AtomicInteger counter = new AtomicInteger();
+
     @CacheResult(cacheName = "test")
     public Integer getLength(String param) {
         return param.length();
     }
-    
+
+
 }
 
 @Path("/resteasy/hello")
@@ -32,7 +35,9 @@ public class ExampleResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello(@QueryParam("name") String name) {
-        System.out.println("request received " + counter.incrementAndGet());
-        return "hello " + name + " Length:" + cache.getLength(Objects.toString(name, ""));
+        int testNumber = counter.incrementAndGet();
+        System.out.println("request received " + testNumber);
+        return "hello " + name + " Length:" + cache.getLength(Objects.toString(name, "") + testNumber);
     }
+
 }
